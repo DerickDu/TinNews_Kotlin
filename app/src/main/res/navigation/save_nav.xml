@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/save_nav"
+    app:startDestination="@id/saveFragment">
+
+    <fragment
+        android:id="@+id/saveFragment"
+        android:name="link.jingweih.tinnews.ui.save.SaveFragment"
+        android:label="@string/title_save"
+        tools:layout="@layout/fragment_save" >
+        <action
+            android:id="@+id/action_saveFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="link.jingweih.tinnews.ui.details.DetailsFragment"
+        android:label="@string/title_details"
+        tools:layout="@layout/fragment_details">
+        <argument
+            android:name="article"
+            app:argType="link.jingweih.tinnews.model.Article" />
+    </fragment>
+</navigation>
