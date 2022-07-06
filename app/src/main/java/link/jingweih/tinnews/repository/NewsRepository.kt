@@ -30,7 +30,7 @@ class NewsRepository @Inject constructor(
             }
         }
         return flow {
-            emit(mutex.withLock { topHeadlines.values.flatten()  })
+            emit(topHeadlines.values.flatten())
         }.combine(articleDao.fetchAllSavedArticles()) { rawArticles, favoriteArticles ->
             val newArticle = rawArticles.map {  article ->
                 if (favoriteArticles.find { it.url == article.url } != null) {

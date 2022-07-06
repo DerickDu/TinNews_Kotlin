@@ -32,7 +32,7 @@ class SaveViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.value = SaveUiState.Loading
             try {
-                getAllSavedNewsUseCase().collect {
+                getAllSavedNewsUseCase(Unit).collect {
                     _uiState.value = SaveUiState.Success(it)
                 }
             } catch (e: Exception) {

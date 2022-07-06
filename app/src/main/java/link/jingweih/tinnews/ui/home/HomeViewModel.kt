@@ -7,10 +7,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import link.jingweih.tinnews.domain.GetAllSavedNewsUseCase
 import link.jingweih.tinnews.domain.GetTopHeadlinesNewsUseCase
 import link.jingweih.tinnews.domain.ToggleFavoriteNewsUseCase
 import link.jingweih.tinnews.model.Article
