@@ -3,10 +3,7 @@ package link.jingweih.tinnews.ui.save
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import link.jingweih.tinnews.domain.GetAllSavedNewsUseCase
 import link.jingweih.tinnews.domain.ToggleFavoriteNewsUseCase
@@ -29,16 +26,17 @@ class SaveViewModel @Inject constructor(
     }
 
     private fun getAllSavedNews() {
-        viewModelScope.launch {
-            _uiState.value = SaveUiState.Loading
-            try {
-                getAllSavedNewsUseCase(Unit).collect {
-                    _uiState.value = SaveUiState.Success(it)
-                }
-            } catch (e: Exception) {
+        getAllSavedNewsUseCase(Unit)
+            .onStart {
+                _uiState.value = SaveUiState.Loading
+            }
+            .onEach {
+                _uiState.value = SaveUiState.Success(it)
+            }
+            .catch { e ->
                 _uiState.value = SaveUiState.Error(e.message)
             }
-        }
+            .launchIn(viewModelScope)
     }
 
     fun toggleFavorite(article: Article) {

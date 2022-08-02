@@ -1,9 +1,6 @@
 package link.jingweih.tinnews.repository
 
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.cancellable
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import link.jingweih.tinnews.database.ArticleDao
@@ -21,7 +18,7 @@ class NewsRepository @Inject constructor(
     private val mutex = Mutex()
     private val topHeadlines = mutableMapOf<Int, List<Article>>()
 
-    suspend fun fetchTopHeadlinesNews(page: Int): Flow<List<Article>> {
+    suspend fun fetchTopHeadlinesNews(page: Int): List<Article> {
         if (!topHeadlines.containsKey(page)) {
             mutex.withLock {
                 topHeadlines[page] = newsApi.getTopHeadlines(
@@ -29,18 +26,7 @@ class NewsRepository @Inject constructor(
                 ).articles
             }
         }
-        return flow {
-            emit(topHeadlines.values.flatten())
-        }.combine(articleDao.fetchAllSavedArticles()) { rawArticles, favoriteArticles ->
-            val newArticle = rawArticles.map {  article ->
-                if (favoriteArticles.find { it.url == article.url } != null) {
-                    article.copy(isFavorite = true)
-                } else {
-                    article.copy(isFavorite = false)
-                }
-            }
-            newArticle
-        }.cancellable()
+        return topHeadlines.values.flatten()
     }
 
     fun fetchAllSavedArticles(): Flow<List<Article>> {

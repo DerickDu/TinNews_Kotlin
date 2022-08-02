@@ -8,9 +8,9 @@ import javax.inject.Inject
 
 class GetAllSavedNewsUseCase @Inject constructor(
     private val newsRepository: NewsRepository
-): BaseUseCase<Unit, Flow<List<Article>>>(Dispatchers.Default) {
+): BaseFlowUseCase<Unit, List<Article>>(Dispatchers.Default) {
 
-    override suspend fun performanceAction(input: Unit): Flow<List<Article>> {
+    override fun execute(input: Unit): Flow<List<Article>> {
         return newsRepository.fetchAllSavedArticles()
     }
 }

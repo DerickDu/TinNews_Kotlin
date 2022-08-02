@@ -10,7 +10,7 @@ class ToggleFavoriteNewsUseCase @Inject constructor(
     defaultDispatcher: CoroutineDispatcher
 ): BaseUseCase<Article, Unit>(defaultDispatcher) {
 
-    override suspend fun performanceAction(input: Article) {
+    override suspend fun execute(input: Article) {
         if (input.isFavorite) {
             newsRepository.favoriteArticle(input)
         } else {

@@ -2,13 +2,12 @@ package link.jingweih.tinnews.domain
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
-import java.util.*
 
 abstract class BaseUseCase<in Input, Output>(private val defaultDispatcher: CoroutineDispatcher) {
 
     suspend operator fun invoke(input: Input): Output = withContext(defaultDispatcher) {
-        performanceAction(input)
+        execute(input)
     }
 
-    protected abstract suspend fun performanceAction(input: Input): Output
+    protected abstract suspend fun execute(input: Input): Output
 }

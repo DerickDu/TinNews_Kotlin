@@ -1,13 +1,10 @@
 package link.jingweih.tinnews.ui.home
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import link.jingweih.tinnews.domain.GetTopHeadlinesNewsUseCase
 import link.jingweih.tinnews.domain.ToggleFavoriteNewsUseCase
@@ -39,18 +36,17 @@ class HomeViewModel @Inject constructor(
         if (job != null) {
             job?.cancel()
         }
-        job = viewModelScope.launch {
-            _uiState.value = TopHeadlinesUiState.Loading
-            try {
-                val flow = getTopHeadlinesNewsUseCase(++initPage)
-                Log.d("test", flow.toString())
-                flow.collect {
-                    _uiState.value = TopHeadlinesUiState.Success(it)
-                }
-            } catch (e: Exception) {
+        job = getTopHeadlinesNewsUseCase(++initPage)
+            .onStart {
+                _uiState.value = TopHeadlinesUiState.Loading
+            }
+            .onEach {
+                _uiState.value = TopHeadlinesUiState.Success(it)
+            }
+            .catch { e ->
                 _uiState.value = TopHeadlinesUiState.Error(e.message)
             }
-        }
+            .launchIn(viewModelScope)
     }
 
     fun toggleFavoriteNews(article: Article) {
