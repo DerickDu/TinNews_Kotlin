@@ -6,6 +6,7 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -24,7 +25,7 @@ import link.jingweih.tinnews.model.Article
 class HomeFragment : Fragment() {
     private val viewModel: HomeViewModel by viewModels()
 
-    private var _binding: FragmentHomeBinding?  = null
+    private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
 
@@ -59,7 +60,8 @@ class HomeFragment : Fragment() {
             })
         }
         binding.homeRecyclerView.itemAnimator?.changeDuration = 0
-        homeAdapter.setHomeArticleItemClickListener(object : HomeAdapter.HomeArticleItemClickListener{
+        homeAdapter.setHomeArticleItemClickListener(object :
+            HomeAdapter.HomeArticleItemClickListener {
             override fun onClickArticle(article: Article) {
                 val direction = HomeFragmentDirections.actionHomeFragmentToDetailsFragment(article)
                 findNavController().navigate(direction)
@@ -81,7 +83,11 @@ class HomeFragment : Fragment() {
                     // New value received
                     when (uiState) {
                         is TopHeadlinesUiState.Success -> homeAdapter.submitList(uiState.articles)
-                        is TopHeadlinesUiState.Error -> Unit
+                        is TopHeadlinesUiState.Error -> Toast.makeText(
+                            context,
+                            uiState.error,
+                            Toast.LENGTH_SHORT
+                        ).show()
                         else -> Unit
                     }
                 }

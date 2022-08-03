@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -69,7 +70,11 @@ class SaveFragment : Fragment() {
                     // New value received
                     when (uiState) {
                         is SaveUiState.Success -> saveAdapter.submitList(uiState.articles)
-                        is SaveUiState.Error -> Unit
+                        is SaveUiState.Error -> Toast.makeText(
+                            context,
+                            uiState.error,
+                            Toast.LENGTH_SHORT
+                        ).show()
                         else -> Unit
                     }
                 }

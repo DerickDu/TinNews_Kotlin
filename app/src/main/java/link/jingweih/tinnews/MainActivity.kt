@@ -28,18 +28,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         if (savedInstanceState == null) {
             setupBottomNavigationBar()
-        } //
-        val api = retrofit.create(NewsApi::class.java)
-        lifecycleScope.launch {
-            withContext(Dispatchers.Default) {
-                Log.d("jingwei", Thread.currentThread().name)
-                try {
-                    val result = api.getTopHeadlines("us", 1, 20)
-                    Log.d("jingwei", result.toString())
-                } catch (throwable: Throwable) {
-                    Log.d("jingwei", throwable.toString())
-                }
-            }
         }
     }
 
