@@ -29,11 +29,16 @@ class MainActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             setupBottomNavigationBar()
         } //
+        val api = retrofit.create(NewsApi::class.java)
         lifecycleScope.launch {
             withContext(Dispatchers.Default) {
                 Log.d("jingwei", Thread.currentThread().name)
-                val result = retrofit.create(NewsApi::class.java).getTopHeadlines("us", 1, 20)
-                Log.d("jingwei", result.toString())
+                try {
+                    val result = api.getTopHeadlines("us", 1, 20)
+                    Log.d("jingwei", result.toString())
+                } catch (throwable: Throwable) {
+                    Log.d("jingwei", throwable.toString())
+                }
             }
         }
     }
